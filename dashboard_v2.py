@@ -96,6 +96,7 @@ platform_options = [{"label": "All Platforms", "value": "all"}] + \
     [{"label": platform, "value": platform} for platform in df["Platform"].unique()]
 
 app = dash.Dash(__name__)
+server = app.server
 
 app.layout = html.Div([
     # Options
