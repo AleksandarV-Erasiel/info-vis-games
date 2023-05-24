@@ -247,8 +247,20 @@ def update_top5_games_reviews(region, genre, platform, year):
     top5_games_negative = top5_games[top5_games["Negative"].notna()]
     
     top5_games_reviews_chart = go.Figure()
-    top5_games_reviews_chart.add_trace(go.Bar(x=top5_games_positive["Name"], y=top5_games_positive["Positive"], name="Positive", orientation="v", marker_color="green"))
-    top5_games_reviews_chart.add_trace(go.Bar(x=top5_games_negative["Name"], y=top5_games_negative["Negative"], name="Negative", orientation="v", marker_color="red"))
+    top5_games_reviews_chart.add_trace(go.Bar(x=top5_games_positive["Name"], y=top5_games_positive["Positive"], name="Positive", orientation="v", marker_color="green",
+        hovertemplate="<b>Name:</b> %{x}<br>" +
+                      "<b>Positive Reviews:</b> %{y}<br>" +
+                      "<b>Publisher:</b> %{customdata[0]}<br>" +
+                      "<b>Platform:</b> %{customdata[1]}<br>" +
+                      "<b>Genre:</b> %{customdata[2]}<extra></extra>",
+        customdata=top5_games_positive[["Publisher", "Platform", "Genre"]],))
+    top5_games_reviews_chart.add_trace(go.Bar(x=top5_games_negative["Name"], y=top5_games_negative["Negative"], name="Negative", orientation="v", marker_color="red",
+        hovertemplate="<b>Name:</b> %{x}<br>" +
+                      "<b>Negative Reviews:</b> %{y}<br>" +
+                      "<b>Publisher:</b> %{customdata[0]}<br>" +
+                      "<b>Platform:</b> %{customdata[1]}<br>" +
+                      "<b>Genre:</b> %{customdata[2]}<extra></extra>",
+        customdata=top5_games_negative[["Publisher", "Platform", "Genre"]],))
 
     top5_games_reviews_chart.update_layout(barmode="overlay")
     top5_games_reviews_chart.update_layout(title_text="Positive VS Negative reviews for best publishers games")
@@ -275,7 +287,7 @@ def update_top5_max_playtime(region, genre, platform, year):
     
     top5_games_max_playtime = top5_games[top5_games["Average playtime forever"].notna()]
     
-    top5_games_max_playtime_chart = px.bar(top5_games_max_playtime, x=top5_games_max_playtime["Name"], y=top5_games_max_playtime["Average playtime forever"])
+    top5_games_max_playtime_chart = px.bar(top5_games_max_playtime, x=top5_games_max_playtime["Name"], y=top5_games_max_playtime["Average playtime forever"], hover_data=["Publisher", "Year", "Platform", "Genre"])
     top5_games_max_playtime_chart.update_layout(title_text="Average playtime forever for best publishers games")
     top5_games_max_playtime_chart.update_xaxes(title_text="Game Name")
     top5_games_max_playtime_chart.update_yaxes(title_text="Number of hours")
