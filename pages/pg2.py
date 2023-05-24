@@ -182,14 +182,14 @@ layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H1("Best Publisher Games - Positive VS Negative",
-                    className='random'),
+                    className='bg-dark text-white'),
 
             dcc.Graph(id="top5-games-reviews")
         ], width={"size": 5}),
 
         dbc.Col([
             html.H1("Best Publisher Games - Average playtime forever",
-                    className='random2'),
+                    className='bg-dark text-white'),
 
             dcc.Graph(id="top5-max-playtime")
         ], width={"size": 5}),
