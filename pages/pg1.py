@@ -54,7 +54,7 @@ def get_sales(df, region, genre=None, platform=None, year=None):
             df = df.loc[df[column] == value]
 
     sales_column = region + '_Sales'
-    sales = df[sales_column].mean()
+    sales = df[sales_column].sum()
 
     return sales
 
