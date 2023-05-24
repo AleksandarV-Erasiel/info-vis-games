@@ -290,10 +290,10 @@ def update_map_chart(region, genre, platform, year):
             mode='markers',
             marker=go.scattermapbox.Marker(
                 size=[
-                    NA_sales * 1000,
-                    EU_sales * 1000,
-                    JP_sales * 1000,
-                    Other_sales * 1000
+                    NA_sales * 10,
+                    EU_sales * 10,
+                    JP_sales * 10,
+                    Other_sales * 10
                 ],
                 color='rgb(51, 141, 39)',
                 colorscale='HSV',
