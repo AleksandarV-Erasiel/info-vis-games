@@ -91,7 +91,7 @@ def filter_data(df, region="NA_Sales", genre="Action", platform=None, year=None)
 #LAYOUT
 ####################################################################################################
 
-dash.register_page(__name__, name='Reviews')
+dash.register_page(__name__, name='Publishers')
 
 
 #lAYOUT SECTION
