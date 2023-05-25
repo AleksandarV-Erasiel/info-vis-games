@@ -149,7 +149,7 @@ layout = dbc.Container([
                 ],
                 value="Global_Sales")
 
-        ], width={"size": 2, "order": 3, "offset": 1}
+        ], width={"size": 2, "order": 3, "offset": 2}
         # xs=12, sm=12, md=12, lg=3, xl=3
         ),
 
@@ -163,21 +163,21 @@ layout = dbc.Container([
 
         ),
 
-    ]),
+    ], justify="centre"),
 
 
     #This plots the graphs for the sales vs year
     dbc.Row([
         dbc.Col([
             dcc.Graph(id="sales-year-evolution")
-        ], width={"size": 4}),
+        ], width={"size": 4}, className="py-2 py-md-3 py-lg-3 py-xl-3"),
 
         dbc.Col([
             dcc.Graph(id = 'map_chart', config={'displayModeBar': True, 'scrollZoom': True},
                       style={'padding-left':'2px'})
-            ], className="py-2 py-md-3 py-lg-3 py-xl-3", align="center", width={"size": 4, "offset": 1})
+            ], className="py-2 py-md-3 py-lg-3 py-xl-3", align="center", width={"size": 4, "offset": 2})
 
-    ], justify="evenly", className="g-0"),
+    ], justify="centre"),
 
     #This gives the title of the world map
     # dbc.Row([
@@ -210,9 +210,9 @@ layout = dbc.Container([
             #         className='text-center bg-dark text-white'),
 
             dcc.Graph(id="metascore-vs-sales")
-            ], width={"size": 4, "offset": 1}),
+            ], width={"size": 4, "offset": 2}),
 
-        ], justify="evenly", className="py-lg-3 py-xl-3"),
+        ], justify="centre", className="py-lg-3 py-xl-3"),
 
 
 ], fluid=True)
@@ -306,10 +306,10 @@ def update_map_chart(region, genre, platform, year):
                 mode='markers',
                 marker=go.scattermapbox.Marker(
                     size=[
-                        NA_sales * 10,
-                        EU_sales * 10,
-                        JP_sales * 10,
-                        Other_sales * 10
+                        NA_sales * 15,
+                        EU_sales * 15,
+                        JP_sales * 20,
+                        Other_sales * 20
                     ],
                     # color='rgb(51, 141, 39)',
                     color='#30B62E',
@@ -336,8 +336,9 @@ def update_map_chart(region, genre, platform, year):
         title= dict(text = 'Sales World Map',font= dict(size= 20)),
         title_x = 0.5,
         height=400,
-        width= 800,
+        width= 700,
         autosize=False,
+        title_font_family="Times New Roman",
         hovermode='closest',
         showlegend=False,
         mapbox=dict(
@@ -403,7 +404,7 @@ def update_metascore_vs_sales(region, genre, platform, year):
     # Create the scatter plot
     metascore_vs_sales_chart = px.scatter(filtered_data_metacritic, x="Metacritic score", y=region,
                                          hover_data=["Name", "Genre", "Publisher", "Year"],
-                                         width=800, height=400)
+                                         width=700, height=400)
     metascore_vs_sales_chart.update_xaxes(title_text="Metacritic Score")
     metascore_vs_sales_chart.update_yaxes(title_text=f"{region_name} Sales (in $)")
     metascore_vs_sales_chart.update_traces(y=filtered_data_metacritic[region] * 10000000)

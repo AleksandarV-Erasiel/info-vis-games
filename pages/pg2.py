@@ -187,16 +187,16 @@ layout = dbc.Container([
             #         className='bg-dark text-white'),
 
             dcc.Graph(id="top5-games-reviews")
-        ], width={"size": 5}, align="center"),
+        ], width={"size": 3}, align="center"),
 
         dbc.Col([
             # html.H1("Best Publisher Games - Average playtime forever",
             #         className='bg-dark text-white'),
 
             dcc.Graph(id="top5-max-playtime")
-        ], width={"size": 5, "offset": 2}, align='center'),
+        ], width={"size": 2, "offset": 4}, align='center'),
 
-    ], justify="center", className="py-lg-3 py-xl-3")
+    ], justify="start", className="py-lg-3 py-xl-3")
 
 ], fluid=True)
 
@@ -306,7 +306,7 @@ def update_top5_max_playtime(region, genre, platform, year):
     top5_games_max_playtime_chart.update_layout(title= dict(text = "Average playtime forever for best publishers games", font= dict(size = 20)),
                                                 title_x = 0.5,
                                                 width=800,
-                                                height=550,
+                                                height=600,
                                                 font_family="Courier New",
                                                 font_color='#A4191B',
                                                 title_font_family="Times New Roman",
