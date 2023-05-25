@@ -170,41 +170,49 @@ layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             dcc.Graph(id="sales-year-evolution")
-        ], width={"size": 8})
-    ], justify="center"),
+        ], width={"size": 4}),
 
-    #This gives the title of the world map
-    dbc.Row([
-        dbc.Col(html.H1("Sales Map",
-                        className='text-center bg-dark text-white'),
-                        width={"size": 3}),
-    ], justify="center", className="py-2 py-md-3 py-lg-3 py-xl-3"),
-
-    #This gives the graph for the world map for viewing sales across regions
-    dbc.Row([
         dbc.Col([
             dcc.Graph(id = 'map_chart', config={'displayModeBar': True, 'scrollZoom': True},
                       style={'padding-left':'2px'})
+            ], className="py-2 py-md-3 py-lg-3 py-xl-3", align="center", width={"size": 4, "offset": 1})
 
-        ], width={"size": 8})
-    ], justify="center"),
+    ], justify="evenly", className="g-0"),
+
+    #This gives the title of the world map
+    # dbc.Row([
+    #     dbc.Col(html.H1("Sales Map",
+    #                     className='text-center bg-dark text-white'),
+    #                     width={"size": 3}),
+    # ], justify="center", className="py-2 py-md-3 py-lg-3 py-xl-3"),
+
+    #This gives the graph for the world map for viewing sales across regions
+    # dbc.Row([
+    #     # dbc.Col([
+    #     #     dcc.Graph(id = 'map_chart', config={'displayModeBar': True, 'scrollZoom': True},
+    #     #               style={'padding-left':'2px'})
+    #
+    #     # ], width={"size": 8})
+    # ], justify="center"),
+
+    html.Hr(),
 
     #This is for the best selling games and metacritic score vs sales
     dbc.Row([
         dbc.Col([
-            html.H1("Best Selling Games",
-                    className='text-center bg-dark text-white'),
+            # html.H1("Best Selling Games",
+            #         className='text-center bg-dark text-white'),
 
             dcc.Graph(id="top10-global-sales")
-            ], width={"size": 5}),
+            ], width={"size": 4}),
         dbc.Col([
-            html.H1("Metacritic score vs Global Sales",
-                    className='text-center bg-dark text-white'),
+            # html.H1("Metacritic score vs Global Sales",
+            #         className='text-center bg-dark text-white'),
 
             dcc.Graph(id="metascore-vs-sales")
-            ], width={"size": 5}),
+            ], width={"size": 4, "offset": 1}),
 
-        ], justify="center", className="py-lg-3 py-xl-3"),
+        ], justify="evenly", className="py-lg-3 py-xl-3"),
 
 
 ], fluid=True)
@@ -227,7 +235,7 @@ def update_sales_year_evolution(region, genre, platform, year):
     filtered_data_Other = filter_data(df, "Other_Sales", genre, platform)
 
     sales_year_evolution_chart = px.scatter(filtered_data, x="Year", y="Price", title=f"Game sales timeline",
-                                            hover_data=["Name", "Publisher", "Genre"])
+                                            hover_data=["Name", "Publisher", "Genre"], width=700, height= 400)
     sales_year_evolution_chart.update_yaxes(title_text="Sales (in $)")
     # Mean game sales calculation
     mean_sales_NA = filtered_data_NA.groupby("Year")["NA_Sales"].mean().reset_index()
@@ -254,8 +262,14 @@ def update_sales_year_evolution(region, genre, platform, year):
     sales_year_evolution_chart.data = [trace for trace in sales_year_evolution_chart.data if
                                         trace.name in region_names_to_keep]
 
-    sales_year_evolution_chart.update_layout(title_text = "Games sales timeline",
-                                             title_x = 0.5)
+    sales_year_evolution_chart.update_layout(title = dict(text = "Games sales trend timeline", font= dict(size= 20)),
+                                             title_x = 0.5,
+                                             font_family="Courier New",
+                                             font_color= '#A4191B',
+                                             title_font_family="Times New Roman",
+                                             title_font_color='black',
+                                             legend_title_font_color="green"
+                                             )
 
     return sales_year_evolution_chart
 
@@ -271,67 +285,72 @@ def update_map_chart(region, genre, platform, year):
     EU_sales = get_sales(df, "EU", genre, platform, year)
     JP_sales = get_sales(df, "JP", genre, platform, year)
     Other_sales = get_sales(df, "Other", genre, platform, year)
-    world_map = {
-        'data': [go.Scattermapbox(
-            lat=
-            [
-                39.50,
-                49.50,
-                36.204824,
-                20.593684
-            ],
-            lon=
-            [
-                -98.35,
-                9.54,
-                138.252924,
-                78.96288
-            ],
-            mode='markers',
-            marker=go.scattermapbox.Marker(
-                size=[
-                    NA_sales * 10,
-                    EU_sales * 10,
-                    JP_sales * 10,
-                    Other_sales * 10
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scattermapbox(
+        lat=
+                [
+                    39.50,
+                    49.50,
+                    36.204824,
+                    20.593684
                 ],
-                color='rgb(51, 141, 39)',
-                colorscale='HSV',
-                showscale=False,
-                sizemode='area',
-                opacity=0.7
-            ),
-            hoverinfo='text',
-            hovertext=[
-                "<b>North Amercia</b><br>" +
-                "<b>Sales</b>: " + str(format_number(NA_sales * 10000000)) + "$<br>",
-                "<b>Europe</b><br>" +
-                "<b>Sales</b>: " + str(format_number(EU_sales * 10000000)) + "$<br>",
-                "<b>Japan</b><br>" +
-                "<b>Sales</b>: " + str(format_number(JP_sales * 10000000)) + "$<br>",
-                "<b>Other countries</b><br>" +
-                "<b>Sales</b>: " + str(format_number(Other_sales * 10000000)) + "$<br>"
-            ]
+                lon=
+                [
+                    -98.35,
+                    9.54,
+                    138.252924,
+                    78.96288
+                ],
+                mode='markers',
+                marker=go.scattermapbox.Marker(
+                    size=[
+                        NA_sales * 10,
+                        EU_sales * 10,
+                        JP_sales * 10,
+                        Other_sales * 10
+                    ],
+                    # color='rgb(51, 141, 39)',
+                    color='#30B62E',
+                    colorscale='HSV',
+                    showscale=False,
+                    sizemode='area',
+                    opacity=0.6
+                ),
+                hoverinfo='text',
+                hovertext=[
+                    "<b>North Amercia</b><br>" +
+                    "<b>Sales</b>: " + str(format_number(NA_sales * 10000000)) + "$<br>",
+                    "<b>Europe</b><br>" +
+                    "<b>Sales</b>: " + str(format_number(EU_sales * 10000000)) + "$<br>",
+                    "<b>Japan</b><br>" +
+                    "<b>Sales</b>: " + str(format_number(JP_sales * 10000000)) + "$<br>",
+                    "<b>Other countries</b><br>" +
+                    "<b>Sales</b>: " + str(format_number(Other_sales * 10000000)) + "$<br>"
+                ]
 
-        )],
+    ))
 
-        'layout': go.Layout(
-            height=300,
-            hovermode='x',
-            paper_bgcolor='#010915',
-            plot_bgcolor='#010915',
-            margin=dict(r=0, l=0, b=0, t=0),
-            mapbox=dict(
-                accesstoken='pk.eyJ1IjoicXM2MjcyNTI3IiwiYSI6ImNraGRuYTF1azAxZmIycWs0cDB1NmY1ZjYifQ.I1VJ3KjeM-S613FLv3mtkw',
-                center=go.layout.mapbox.Center(lat=46.8719, lon=6.5674),
-                # style='open-street-map',
-                zoom=1.2,
-            ),
-            autosize=True
-        )
-    }
+    fig.update_layout(
+        title= dict(text = 'Sales World Map',font= dict(size= 20)),
+        title_x = 0.5,
+        height=400,
+        width= 800,
+        autosize=False,
+        hovermode='closest',
+        showlegend=False,
+        mapbox=dict(
+            accesstoken='pk.eyJ1IjoicXM2MjcyNTI3IiwiYSI6ImNraGRuYTF1azAxZmIycWs0cDB1NmY1ZjYifQ.I1VJ3KjeM-S613FLv3mtkw',
+            center=go.layout.mapbox.Center(lat=46.8719, lon=6.5674),
+            bearing=0,
+            pitch=0,
+            zoom=0.5,
+            style='light'
+        ),
+    )
 
-    return world_map
+    return fig
 
 
 @callback(
@@ -351,14 +370,22 @@ def update_top10_global_sales(region, genre, platform, year):
     # top10 = filtered_data_v2.sort_values(region, ascending=False).head(20)
     shortened_names = [name[:30] + "..." if len(name) > 30 else name for name in best_selling_games_df["Name"]]
     top10_global_sales_chart = px.bar(best_selling_games_df, x=shortened_names, y=region,
-                  hover_data=["Publisher", "Year", "Platform", "Genre"], color="Platform")
+                  hover_data=["Publisher", "Year", "Platform", "Genre"], color="Platform", width=700, height=400)
     top10_global_sales_chart.update_yaxes(title_text=f"{region_name} Sales (in $)")
     top10_global_sales_chart.update_xaxes(title_text="Game Name")
     top10_global_sales_chart.update_traces(y=best_selling_games_df[region] * 10000000)
     top10_global_sales_chart.update_layout(title=f"Best selling games in {region_name} for {genre} games")
     if platform != None:
-        top10_global_sales_chart.update_layout(title=f"Region: {region_name}, Genre: {genre}, Platform: {platform}",
-                                               title_x = 0.5)
+        top10_global_sales_chart.update_layout(title= dict(text = f"Best selling games across regions and platforms",
+                                                           font=dict(size=20)),
+                                               title_x = 0.5,
+                                               font_family="Courier New",
+                                               # font_color="#6D10CF",
+                                               font_color= '#A4191B',
+                                               title_font_family="Times New Roman",
+                                               title_font_color='black',
+                                               legend_title_font_color="black"
+                                               )
     return top10_global_sales_chart
 
 @callback(
@@ -375,14 +402,21 @@ def update_metascore_vs_sales(region, genre, platform, year):
 
     # Create the scatter plot
     metascore_vs_sales_chart = px.scatter(filtered_data_metacritic, x="Metacritic score", y=region,
-                      hover_data=["Name", "Genre", "Publisher", "Year"],
-                      # title=f"Metacritic Score vs. Global Sales for {genre} games"
-                                          )
+                                         hover_data=["Name", "Genre", "Publisher", "Year"],
+                                         width=800, height=400)
     metascore_vs_sales_chart.update_xaxes(title_text="Metacritic Score")
     metascore_vs_sales_chart.update_yaxes(title_text=f"{region_name} Sales (in $)")
     metascore_vs_sales_chart.update_traces(y=filtered_data_metacritic[region] * 10000000)
-    # metascore_vs_sales_chart.update_layout(title_text = f"Metacritic Score vs. Global Sales for {genre} games",
-    #                                        x_title = 0.5)
+    # metascore_vs_sales_chart.update_layout(title= f"Metacritic Score vs. Global Sales for {genre} games",
+    #                                         x_title=0.5)
+    metascore_vs_sales_chart.update_layout(title = dict(text=f"Metacritic Score vs. Global Sales for {genre} games", font= dict(size= 20)),
+                                             title_x = 0.5,
+                                             font_family="Courier New",
+                                             font_color= '#A4191B',
+                                             title_font_family="Times New Roman",
+                                             title_font_color='black',
+                                             legend_title_font_color="green"
+                                             )
 
 
     return metascore_vs_sales_chart

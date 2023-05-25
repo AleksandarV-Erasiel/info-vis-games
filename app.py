@@ -2,7 +2,7 @@ import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 
-app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.SPACELAB],
+app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.COSMO],
                 meta_tags=[{'name': 'viewport','content': 'width=device-width, initial-scale=1.0'}
 
                            ])
@@ -28,7 +28,7 @@ sidebar = dbc.Nav(
 
 app.layout = dbc.Container([
     dbc.Row([
-        dbc.Col(html.Div("Python Multipage App with Dash",
+        dbc.Col(html.Div("Game Data Analysis",
                          style={'fontSize':50, 'textAlign':'center'}))
     ]),
 

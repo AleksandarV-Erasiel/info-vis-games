@@ -171,28 +171,30 @@ layout = dbc.Container([
     #This is for the best selling games and top 5 publishers
     dbc.Row([
         dbc.Col([
-            html.H1("Top 5 Publishers",
-                    className='text-center bg-dark text-white'),
+            # html.H1("Top 5 Publishers",
+            #         className='text-center bg-dark text-white'),
 
             dcc.Graph(id="top5-publisher-decomp")
-            ], width={"size": 5}, align="center"),
+            ], width={"size": 8}, align="center"),
+
     ], justify="center", className="py-lg-3 py-xl-3"),
 
     #This is for the metacritic score vs sales and games prices
     dbc.Row([
+
         dbc.Col([
-            html.H1("Best Publisher Games - Positive VS Negative",
-                    className='bg-dark text-white'),
+            # html.H1("Best Publisher Games - Positive VS Negative",
+            #         className='bg-dark text-white'),
 
             dcc.Graph(id="top5-games-reviews")
-        ], width={"size": 5}),
+        ], width={"size": 5}, align="center"),
 
         dbc.Col([
-            html.H1("Best Publisher Games - Average playtime forever",
-                    className='bg-dark text-white'),
+            # html.H1("Best Publisher Games - Average playtime forever",
+            #         className='bg-dark text-white'),
 
             dcc.Graph(id="top5-max-playtime")
-        ], width={"size": 5}),
+        ], width={"size": 5, "offset": 2}, align='center'),
 
     ], justify="center", className="py-lg-3 py-xl-3")
 
@@ -215,13 +217,18 @@ def update_top5_publisher_decomp(region, genre, platform, year):
     top5_games = filtered_data[filtered_data['Publisher'].isin(top5_publishers.index)]
     top5_games[region] = top5_games[region] * 10000000
     top5_publishers_chart = px.bar(top5_games, x="Publisher", y=region, hover_name="Name", title="Best Gaming Studios By Region",
-                                   hover_data=["Publisher", "Year", "Platform", "Genre"])
+                                   hover_data=["Publisher", "Year", "Platform", "Genre"],  width=1000, height=600)
     top5_publishers_chart.update_yaxes(title_text=f"{region_name} Sales (in $)")
     top5_publishers_chart.update_layout(
-        title=f"Region: {region_name} (Decomposed)",
+        title=dict(text = f"Top 5 Publishers in {region_name} (Decomposed)", font=dict(size = 24)),
         yaxis_title="Total Sales (in $)",
         xaxis_title="Publisher",
         title_x = 0.5,
+        font_family="Courier New",
+        font_color='#A4191B',
+        title_font_family="Times New Roman",
+        title_font_color='black',
+        # legend_title_font_color="green"
         # height=00  # Set the desired height value (in pixels)
     )
 
@@ -262,8 +269,16 @@ def update_top5_games_reviews(region, genre, platform, year):
                       "<b>Genre:</b> %{customdata[2]}<extra></extra>",
         customdata=top5_games_negative[["Publisher", "Platform", "Genre"]],))
 
-    top5_games_reviews_chart.update_layout(barmode="overlay")
-    top5_games_reviews_chart.update_layout(title_text="Positive VS Negative reviews for best publishers games")
+    top5_games_reviews_chart.update_layout(barmode="overlay",
+                                           width=800,
+                                           height=600,
+                                           font_family="Courier New",
+                                           font_color='#A4191B',
+                                           title_font_family="Times New Roman",
+                                           title_font_color='black'
+                                           )
+    top5_games_reviews_chart.update_layout(title= dict(text = "Positive VS Negative reviews for best publishers games", font = dict(size = 20)),
+                                           title_x = 0.5)
     top5_games_reviews_chart.update_xaxes(title_text="Game Name")
     top5_games_reviews_chart.update_yaxes(title_text="Number of reviews")
 
@@ -288,7 +303,15 @@ def update_top5_max_playtime(region, genre, platform, year):
     top5_games_max_playtime = top5_games[top5_games["Average playtime forever"].notna()]
     
     top5_games_max_playtime_chart = px.bar(top5_games_max_playtime, x=top5_games_max_playtime["Name"], y=top5_games_max_playtime["Average playtime forever"], hover_data=["Publisher", "Year", "Platform", "Genre"])
-    top5_games_max_playtime_chart.update_layout(title_text="Average playtime forever for best publishers games")
+    top5_games_max_playtime_chart.update_layout(title= dict(text = "Average playtime forever for best publishers games", font= dict(size = 20)),
+                                                title_x = 0.5,
+                                                width=800,
+                                                height=550,
+                                                font_family="Courier New",
+                                                font_color='#A4191B',
+                                                title_font_family="Times New Roman",
+                                                title_font_color='black'
+                                                )
     top5_games_max_playtime_chart.update_xaxes(title_text="Game Name")
     top5_games_max_playtime_chart.update_yaxes(title_text="Number of hours")
     
