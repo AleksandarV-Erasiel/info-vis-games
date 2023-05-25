@@ -2,7 +2,7 @@ import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 
-app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.COSMO],
+app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.MORPH],
                 meta_tags=[{'name': 'viewport','content': 'width=device-width, initial-scale=1.0'}
 
                            ])
@@ -54,4 +54,4 @@ app.layout = dbc.Container([
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True, port = 3000)
